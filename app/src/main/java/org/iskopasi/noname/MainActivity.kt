@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
 
             adapter.dataList.clear()
             adapter.dataList.addAll(list)
+
+            binding.srl.isRefreshing = false
         })
 
         setSupportActionBar(binding.toolbar)
@@ -40,8 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.srl.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark)
         binding.srl.setOnRefreshListener {
-            model.liveData.value
-            binding.srl.isRefreshing = false
+            model.getNewData()
         }
     }
 }
