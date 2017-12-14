@@ -1,21 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="model"
             type="org.iskopasi.noname.DnscItem" />
+
+        <import type="android.view.View" />
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/server"
-            android:layout_width="wrap_content"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{model.server}" />
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@{model.name}"
+                android:textColor="@color/textColor4"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/inner_cl"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="cs-de" />
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/inner_cl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:minWidth="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/version"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{`Version: ` + model.version}"
+                    android:textColor="@color/textColor3"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/namecoin"
+                    tools:text="version 1" />
+
+                <TextView
+                    android:id="@+id/namecoin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/namecoin"
+                    android:textColor='@{model.namecoin.equals("no") ? @color/red : @color/green}'
+                    android:textSize="10sp"
+                    android:visibility='@{model.namecoin.equals("no") ? View.GONE : View.VISIBLE}'
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/no_logs"
+                    tools:text="namecoin" />
+
+                <TextView
+                    android:id="@+id/no_logs"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text='@{model.noLogs.equals("yes") ? "No logs" : "Logging"}'
+                    android:textColor='@{model.noLogs.equals("yes") ? @color/green : @color/red}'
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/location"
+                    tools:text='No logs' />
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:text="@{model.location}"
+                    android:textColor="@color/textColor3"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Germany" />
+            </android.support.constraint.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/full_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@{model.fullname}"
+                android:textColor="@color/textColor3"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/inner_cl"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name"
+                app:layout_constraintVertical_bias="0.100000024"
+                tools:text="CSI data server" />
+        </android.support.constraint.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@{model.comment}"
+            android:textColor="@color/textColor3"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+            tools:text="shitty server never go here plz i told you dont @sample/tools:us_phones" />
+
     </android.support.constraint.ConstraintLayout>
 </layout>
