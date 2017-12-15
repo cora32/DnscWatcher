@@ -11,14 +11,7 @@ class Repo {
     private val re by lazy { Pattern.compile("(.*?),(\".*?\"),(\".*?\"),(\".*?\"),(\".*?\"),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*)") }
     fun getData(): MutableLiveData<List<DnscItem>> {
         val data = MutableLiveData<List<DnscItem>>()
-        val list = ArrayList<DnscItem>()
-
-        list.add(DnscItem(0, "test", "test6", "test6", "test6", "test6", "test6", "comment"))
-        list.add(DnscItem(0, "test", "test6", "test6", "test6", "test6", "test6", "comment"))
-        list.add(DnscItem(0, "test", "test6", "test6", "test6", "test6", "test6", "comment"))
-        list.add(DnscItem(0, "test", "test6", "test6", "test6", "test6", "test6", "comment"))
-
-        data.value = list
+        data.value = ArrayList()
         return data
     }
 

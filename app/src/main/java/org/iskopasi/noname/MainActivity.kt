@@ -8,7 +8,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.view.animation.AnimationUtils
 import org.iskopasi.noname.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
     private val registry by lazy { LifecycleRegistry(this) }
@@ -25,11 +27,22 @@ class MainActivity : AppCompatActivity() {
         model.liveData.observe(this, Observer<List<DnscItem>> { list ->
             if (list == null) return@Observer
 
-            adapter.dataList.clear()
-            adapter.dataList.addAll(list)
+            if (list.isNotEmpty()) {
+                if (R.id.rv == binding.switcher.nextView.id) {
+                    binding.switcher.showNext()
+                }
+
+                adapter.dataList.clear()
+                adapter.dataList.addAll(list)
+            } else if (R.id.text_empty == binding.switcher.nextView.id) {
+                binding.switcher.showNext()
+            }
 
             binding.srl.isRefreshing = false
         })
+
+        binding.switcher.inAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in)
+        binding.switcher.outAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out)
 
         setSupportActionBar(binding.toolbar)
 

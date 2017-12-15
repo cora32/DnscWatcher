@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Noname</string>
     <string name="namecoin">Namecoin</string>
+    <string name="list_empty">Pull to refresh</string>
 </resources>
