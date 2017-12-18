@@ -10,4 +10,5 @@ data class DnscItem(val id: Long,
                     val namecoin: String,
                     val noLogs: String,
                     val location: String,
-                    val comment: String)
+                    val comment: String,
+                    var online: Boolean)

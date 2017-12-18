@@ -20,4 +20,14 @@ class DataModel : ViewModel() {
             }
         }
     }
+
+    fun sortBy(list: List<DnscItem>, property: Any) {
+        doAsync {
+            val data = Repo().sortBy(list, property)
+
+            onComplete {
+                liveData.value = data
+            }
+        }
+    }
 }

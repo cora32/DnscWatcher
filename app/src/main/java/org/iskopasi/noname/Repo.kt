@@ -28,17 +28,22 @@ class Repo {
                 .map { re.matcher(it) }
                 .filter { it.find() }
                 .forEach {
-                    list.add(DnscItem(list.size.toLong(),
-                            it.group(1),
-                            it.group(2),
-                            it.group(7),
-                            it.group(10),
-                            it.group(9),
-                            it.group(4),
-                            it.group(3)))
+                    list.add(DnscItem(list.size.toLong(),      //id
+                            it.group(1),                //name
+                            it.group(2),                //fullname
+                            it.group(7),                //version
+                            it.group(10),               //namecoin
+                            it.group(9),                //noLogs
+                            it.group(4),                //location
+                            it.group(3),                //comment
+                            true))                      //online
                 }
 
-        return list
+        return sortBy(list, DnscItem::namecoin)
+    }
+
+    fun sortBy(list: List<DnscItem>, property: Any): List<DnscItem> {
+        return list.sortedWith(compareByDescending(property as (DnscItem) -> Comparable<*>?))
     }
 
 //    fun getNewDataFuture(): List<DnscItem> {

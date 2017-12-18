@@ -47,8 +47,7 @@ class Adapter(context: Context) : RecyclerView.Adapter<Adapter.ViewHolder>() {
             return false
         }
 
-        override fun compare(a: DnscItem?, b: DnscItem?): Int =
-                Comparator<DnscItem> { (id), (id2) -> id2.compareTo(id) }.compare(a, b)
+        override fun compare(a: DnscItem?, b: DnscItem?): Int = 0
 
         override fun areItemsTheSame(item1: DnscItem?, item2: DnscItem?): Boolean = item1?.equals(item2) as Boolean
 

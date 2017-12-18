@@ -2,4 +2,9 @@
     <string name="app_name">Noname</string>
     <string name="namecoin">Namecoin</string>
     <string name="list_empty">Pull to refresh</string>
+    <string name="sort">Sort</string>
+    <string name="sort_by">Sort by:</string>
+    <string name="by_name">Name</string>
+    <string name="by_logs">Logging</string>
+    <string name="by_online">Online</string>
 </resources>
