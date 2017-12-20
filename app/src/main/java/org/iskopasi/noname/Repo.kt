@@ -9,6 +9,8 @@ import java.util.regex.Pattern
  */
 class Repo {
     private val re by lazy { Pattern.compile("(.*?),(\".*?\"),(\".*?\"),(\".*?\"),(\".*?\"),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*)") }
+    private val cache: ArrayList<DnscItem> = ArrayList()
+
     fun getData(): MutableLiveData<List<DnscItem>> {
         val data = MutableLiveData<List<DnscItem>>()
         data.value = ArrayList()
@@ -39,12 +41,17 @@ class Repo {
                             true))                      //online
                 }
 
-        return sortBy(list, DnscItem::namecoin)
+        cacheData(list)
+
+        return list
     }
 
-    fun sortBy(list: List<DnscItem>, property: Any): List<DnscItem> {
-        return list.sortedWith(compareByDescending(property as (DnscItem) -> Comparable<*>?))
+    private fun cacheData(list: ArrayList<DnscItem>) {
+        cache.clear()
+        cache.addAll(list)
     }
+
+    fun getCachedData(): List<DnscItem> = cache
 
 //    fun getNewDataFuture(): List<DnscItem> {
 //        val job: (AnkoAsyncContext<Repo>.() -> List<DnscItem>) = {

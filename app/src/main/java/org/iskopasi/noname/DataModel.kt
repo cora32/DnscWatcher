@@ -9,11 +9,12 @@ import org.jetbrains.anko.onComplete
  * Created by cora32 on 13.12.2017.
  */
 class DataModel : ViewModel() {
-    val liveData: MutableLiveData<List<DnscItem>> by lazy { Repo().getData() }
+    private val repo: Repo by lazy { Repo() }
+    val liveData: MutableLiveData<List<DnscItem>> by lazy { repo.getData() }
 
     fun getNewData() {
         doAsync {
-            val data = Repo().getNewData()
+            val data = repo.getNewData()
 
             onComplete {
                 liveData.value = data
@@ -21,9 +22,9 @@ class DataModel : ViewModel() {
         }
     }
 
-    fun sortBy(list: List<DnscItem>, property: Any) {
+    fun getCachedData() {
         doAsync {
-            val data = Repo().sortBy(list, property)
+            val data = repo.getCachedData()
 
             onComplete {
                 liveData.value = data

@@ -20,7 +20,7 @@ import org.iskopasi.noname.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private val registry by lazy { LifecycleRegistry(this) }
     private lateinit var binding: ActivityMainBinding
-    private val adapter = Adapter(this)
+    private val adapter = Adapter(this, compareBy(DnscItem::name))
     private val sortClHeight by lazy { resources.getDimensionPixelSize(R.dimen.sort_cl_height) }
     private val transition by lazy { ChangeBounds() }
 
@@ -30,6 +30,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        //Setting up actionbar
+        setSupportActionBar(binding.toolbar)
+
+        //Setting up model and observer
         val model = ViewModelProviders.of(this).get(DataModel::class.java)
         model.liveData.observe(this, Observer<List<DnscItem>> { list ->
             if (list == null) return@Observer
@@ -48,25 +53,21 @@ class MainActivity : AppCompatActivity() {
             binding.srl.isRefreshing = false
         })
 
+        //Setting up switcher
         binding.switcher.inAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in)
         binding.switcher.outAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out)
 
+        //Setting up radio buttons click actions
         binding.sortRadioGroup.setOnCheckedChangeListener({ _, id ->
-            //TODO: use sortlist's compare()
-            if (adapter.dataList.size() == 0)
-                return@setOnCheckedChangeListener
-
-            val list = ArrayList<DnscItem>()
-            (0 until adapter.dataList.size()).mapTo(list) { adapter.dataList.get(it) }
             when (id) {
-                R.id.name_rb -> model.sortBy(list, DnscItem::name)
-                R.id.no_logs_rb -> model.sortBy(list, DnscItem::noLogs)
-                R.id.online_rb -> model.sortBy(list, DnscItem::online)
+                R.id.name_rb -> adapter.setComparator(compareBy(DnscItem::name))
+                R.id.no_logs_rb -> adapter.setComparator(compareByDescending(DnscItem::noLogs).thenBy(DnscItem::name))
+                R.id.online_rb -> adapter.setComparator(compareBy(DnscItem::online))
             }
+            model.getCachedData()
         })
 
-        setSupportActionBar(binding.toolbar)
-
+        //Setting up adapter and recyclerview settings
         adapter.setHasStableIds(true)
         binding.rv.layoutManager = LinearLayoutManager(this)
         binding.rv.setHasFixedSize(true)
@@ -74,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         binding.rv.adapter = adapter
         binding.rv.addItemDecoration(DividerItemDecoration(this, (binding.rv.layoutManager as LinearLayoutManager).orientation))
 
+        //Setting up swiperefreshlayout settings
         binding.srl.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
         binding.srl.setOnRefreshListener {
             model.getNewData()
