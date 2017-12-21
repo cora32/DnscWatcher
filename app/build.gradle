@@ -63,4 +63,5 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-android-processor:${daggerVersion}"
     compile "org.jetbrains.anko:anko-commons:$anko_version"
     implementation 'com.android.support:design:26.1.0'
+    compile 'com.hannesdorfmann:adapterdelegates3:3.0.1'
 }

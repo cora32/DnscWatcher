@@ -14,13 +14,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import org.iskopasi.noname.adapters.DnsAdapter
 import org.iskopasi.noname.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
     private val registry by lazy { LifecycleRegistry(this) }
     private lateinit var binding: ActivityMainBinding
-    private val adapter = Adapter(this, compareBy(DnscItem::name))
+    private val adapter = DnsAdapter(this, compareBy(DnscItem::name))
     private val sortClHeight by lazy { resources.getDimensionPixelSize(R.dimen.sort_cl_height) }
     private val transition by lazy { ChangeBounds() }
 
