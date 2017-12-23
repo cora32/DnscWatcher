@@ -15,12 +15,12 @@ android {
     dataBinding {
         enabled true
     }
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.2'
     defaultConfig {
         applicationId "org.iskopasi.noname"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -47,8 +47,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation "com.android.support:appcompat-v7:$support_version"
+    implementation "com.android.support:recyclerview-v7:$support_version"
+    implementation "com.android.support:design:$support_version"
     compile "android.arch.persistence.room:runtime:$lifecycle_version"
     annotationProcessor "android.arch.persistence.room:compiler:$lifecycle_version"
     kapt "android.arch.persistence.room:compiler:$lifecycle_version"
@@ -62,6 +63,5 @@ dependencies {
     compile "com.google.dagger:dagger-android-support:${daggerVersion}"
     annotationProcessor "com.google.dagger:dagger-android-processor:${daggerVersion}"
     compile "org.jetbrains.anko:anko-commons:$anko_version"
-    implementation 'com.android.support:design:26.1.0'
     compile 'com.hannesdorfmann:adapterdelegates3:3.0.1'
 }

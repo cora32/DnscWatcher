@@ -6,6 +6,7 @@ buildscript {
     ext.lifecycle_version = '1.0.0'
     ext.daggerVersion = '2.11'
     ext.anko_version = '0.10.1'
+    ext.support_version = '27.0.2'
     repositories {
         google()
         jcenter()
