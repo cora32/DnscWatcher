@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity() {
     override fun getLifecycle(): LifecycleRegistry = registry
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //setting main theme to replace splash screen
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
