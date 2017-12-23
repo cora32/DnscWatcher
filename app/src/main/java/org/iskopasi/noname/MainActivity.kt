@@ -14,6 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import org.iskopasi.noname.adapters.DnsAdapter
 import org.iskopasi.noname.databinding.ActivityMainBinding
 import org.iskopasi.noname.entities.DnscItem
@@ -41,7 +42,12 @@ class MainActivity : AppCompatActivity() {
         //Setting up model and observer
         val model = ViewModelProviders.of(this).get(DataModel::class.java)
         model.liveData.observe(this, Observer<List<DnscItem>> { list ->
-            if (list == null) return@Observer
+            binding.srl.isRefreshing = false
+
+            if (list == null) {
+                Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show()
+                return@Observer
+            }
 
             if (list.isNotEmpty()) {
                 if (R.id.rv == binding.switcher.nextView.id) {
@@ -53,8 +59,6 @@ class MainActivity : AppCompatActivity() {
             } else if (R.id.text_empty == binding.switcher.nextView.id) {
                 binding.switcher.showNext()
             }
-
-            binding.srl.isRefreshing = false
         })
 
         //Setting up switcher

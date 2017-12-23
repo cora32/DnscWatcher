@@ -1,9 +1,12 @@
 package org.iskopasi.noname.repo
 
+import android.util.Log
 import org.iskopasi.noname.Utils
 import org.iskopasi.noname.entities.DnscItem
 import java.net.URL
 import java.util.regex.Pattern
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.HttpsURLConnection
 
 /**
  * Created by cora32 on 13.12.2017.
@@ -19,32 +22,45 @@ class Repo {
         return list
     }
 
-    fun getNewData(): List<DnscItem> {
-        val url = URL("https://raw.githubusercontent.com/jedisct1/dnscrypt-resolvers/master/v1/dnscrypt-resolvers.csv")
-        val urlConnection = url.openConnection()
-        val response = Utils.getStringFromInputStream(urlConnection.getInputStream())
-
-        val splitList = response.split("\n")
-
+    fun getNewData(): List<DnscItem>? {
         val list = ArrayList<DnscItem>()
-        (1 until splitList.size)
-                .map { splitList[it] }
-                .map { re.matcher(it) }
-                .filter { it.find() }
-                .forEach {
-                    list.add(DnscItem(list.size.toLong(),      //id
-                            it.group(1),                //name
-                            it.group(2),                //fullname
-                            it.group(7),                //version
-                            it.group(10),               //namecoin
-                            it.group(9),                //noLogs
-                            it.group(4),                //location
-                            it.group(3),                //comment
-                            true))                      //online
-                }
 
-        cacheData(list)
-        saveDataToDb(list)
+        try {
+            //Accepting all certificates
+            val allHostsValid = HostnameVerifier { hostname, session -> true }
+            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid)
+
+            //Requesting direct ip in case dns-server fails.
+            val url = URL("https://151.101.36.133/jedisct1/dnscrypt-resolvers/master/v1/dnscrypt-resolvers.csv")
+            val urlConnection = url.openConnection()
+            urlConnection.setRequestProperty("Host", "raw.githubusercontent.com")
+            val response = Utils.getStringFromInputStream(urlConnection.getInputStream())
+
+            val splitList = response.split("\n")
+
+            (1 until splitList.size)
+                    .map { splitList[it] }
+                    .map { re.matcher(it) }
+                    .filter { it.find() }
+                    .forEach {
+                        list.add(DnscItem(list.size.toLong(),      //id
+                                it.group(1),                //name
+                                it.group(2),                //fullname
+                                it.group(7),                //version
+                                it.group(10),               //namecoin
+                                it.group(9),                //noLogs
+                                it.group(4),                //location
+                                it.group(3),                //comment
+                                true))                      //online
+                    }
+
+            cacheData(list)
+            saveDataToDb(list)
+        } catch (ex: Exception) {
+            Log.e("Network ex", "GetNewData ex: " + ex.localizedMessage)
+            ex.printStackTrace()
+            return null
+        }
 
         return list
     }
