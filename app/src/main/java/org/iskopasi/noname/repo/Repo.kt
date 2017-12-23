@@ -1,6 +1,7 @@
-package org.iskopasi.noname
+package org.iskopasi.noname.repo
 
-import android.arch.lifecycle.MutableLiveData
+import org.iskopasi.noname.Utils
+import org.iskopasi.noname.entities.DnscItem
 import java.net.URL
 import java.util.regex.Pattern
 
@@ -10,11 +11,12 @@ import java.util.regex.Pattern
 class Repo {
     private val re by lazy { Pattern.compile("(.*?),(\".*?\"),(\".*?\"),(\".*?\"),(\".*?\"),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*)") }
     private val cache: ArrayList<DnscItem> = ArrayList()
+    private val db: DnsDb by lazy { DnsDb() }
 
-    fun getData(): MutableLiveData<List<DnscItem>> {
-        val data = MutableLiveData<List<DnscItem>>()
-        data.value = ArrayList()
-        return data
+    fun getData(): List<DnscItem> {
+        val list: List<DnscItem> = db.getData()
+        cacheData(list as ArrayList<DnscItem>)
+        return list
     }
 
     fun getNewData(): List<DnscItem> {
@@ -42,8 +44,13 @@ class Repo {
                 }
 
         cacheData(list)
+        saveDataToDb(list)
 
         return list
+    }
+
+    private fun saveDataToDb(list: ArrayList<DnscItem>) {
+        db.saveData(list)
     }
 
     private fun cacheData(list: ArrayList<DnscItem>) {

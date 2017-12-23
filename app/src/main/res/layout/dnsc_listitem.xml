@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="org.iskopasi.noname.DnscItem" />
+            type="org.iskopasi.noname.entities.DnscItem" />
 
         <import type="android.view.View" />
     </data>

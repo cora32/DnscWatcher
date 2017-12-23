@@ -3,8 +3,8 @@ package org.iskopasi.noname.adapters
 import android.content.Context
 import android.support.v7.util.SortedList
 import android.support.v7.widget.util.SortedListAdapterCallback
-import org.iskopasi.noname.DnscItem
 import org.iskopasi.noname.adapterdelegates.DnsAdapterDelegate
+import org.iskopasi.noname.entities.DnscItem
 
 /**
  * Created by cora32 on 21.12.2017.

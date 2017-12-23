@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import org.iskopasi.noname.adapters.DnsAdapter
 import org.iskopasi.noname.databinding.ActivityMainBinding
+import org.iskopasi.noname.entities.DnscItem
 
 
 class MainActivity : AppCompatActivity() {

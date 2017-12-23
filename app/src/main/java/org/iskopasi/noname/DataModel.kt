@@ -2,6 +2,8 @@ package org.iskopasi.noname
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import org.iskopasi.noname.entities.DnscItem
+import org.iskopasi.noname.repo.Repo
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.onComplete
 
@@ -10,7 +12,17 @@ import org.jetbrains.anko.onComplete
  */
 class DataModel : ViewModel() {
     private val repo: Repo by lazy { Repo() }
-    val liveData: MutableLiveData<List<DnscItem>> by lazy { repo.getData() }
+    val liveData = MutableLiveData<List<DnscItem>>()
+
+    init {
+        doAsync {
+            val data = repo.getData()
+
+            onComplete {
+                liveData.value = data
+            }
+        }
+    }
 
     fun getNewData() {
         doAsync {
