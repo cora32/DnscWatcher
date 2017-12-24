@@ -10,11 +10,13 @@ import android.support.transition.TransitionManager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import com.google.firebase.iid.FirebaseInstanceId
 import org.iskopasi.noname.adapters.DnsAdapter
 import org.iskopasi.noname.databinding.ActivityMainBinding
 import org.iskopasi.noname.entities.DnscItem
@@ -33,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         //setting main theme to replace splash screen
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
+        val token = FirebaseInstanceId.getInstance().token
+        Log.e("FCM_nnm", "Token: $token")
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 

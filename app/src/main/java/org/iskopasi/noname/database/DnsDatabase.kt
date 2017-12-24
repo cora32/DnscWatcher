@@ -14,5 +14,5 @@ abstract class DnsDatabase : RoomDatabase() {
         const val DNS_TABLE = "DNS_TABLE"
     }
 
-    open abstract fun dnsDao(): DnsDao
+    abstract fun dnsDao(): DnsDao
 }
