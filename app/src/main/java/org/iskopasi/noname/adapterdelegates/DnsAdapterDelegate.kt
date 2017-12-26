@@ -28,13 +28,6 @@ class DnsAdapterDelegate(private val context: Context) : AdapterDelegate<SortedL
                                   holder: RecyclerView.ViewHolder, @Nullable payloads: List<Any>) {
         val item = items.get(position)
         (holder as ViewHolder).bind(item)
-
-//        if (item.online)
-//            (holder as DnscListitemBinding).onlineView.background.mutate().setColorFilter(
-//                    ContextCompat.getColor(context, R.color.online), PorterDuff.Mode.SRC_IN)
-//        else
-//            (holder as DnscListitemBinding).onlineView.background.mutate().setColorFilter(
-//                    ContextCompat.getColor(context, R.color.offline), PorterDuff.Mode.SRC_IN)
     }
 
     class ViewHolder(private val binding: DnscListitemBinding) : RecyclerView.ViewHolder(binding.root) {

@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.transition.AutoTransition
 import android.support.transition.ChangeBounds
 import android.support.transition.TransitionManager
 import android.support.v7.app.AppCompatActivity
@@ -13,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Toast
@@ -63,13 +65,25 @@ class MainActivity : AppCompatActivity() {
                 adapter.dataList.addAll(list)
 
                 doAsync {
+                    val tr = AutoTransition()
+                    tr.duration = 2000
                     for (i in 0..adapter.dataList.size()) {
                         val item = adapter.dataList.get(i)
 
-                        if (model.checkOnline(item.ip)) {
-                            item.online = true
-                            binding.rv.post({ adapter.notifyItemChanged(i) })
-                        }
+                        if (model.checkOnline(item.ip))
+                            item.online = 1
+                        else
+                            item.online = -1
+
+                        binding.rv.post({
+                            val childView: View? = binding.rv.getChildAt(i)
+                            val onl: View? = childView?.findViewById(R.id.online_view)
+                            val onlp: ViewGroup? = childView?.findViewById(R.id.root_1)
+                            TransitionManager.beginDelayedTransition(onlp as ViewGroup, tr)
+                            adapter.notifyItemChanged(i)
+                        })
+
+                        Thread.sleep(2000)
                     }
                 }
             } else if (R.id.text_empty == binding.switcher.nextView.id) {

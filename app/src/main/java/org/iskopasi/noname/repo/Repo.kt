@@ -3,6 +3,7 @@ package org.iskopasi.noname.repo
 import android.util.Log
 import org.iskopasi.noname.Utils
 import org.iskopasi.noname.entities.DnscItem
+import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.URL
 import java.util.regex.Pattern
@@ -52,7 +53,7 @@ class Repo {
                                 it.group(9),                //noLogs
                                 it.group(4),                //location
                                 it.group(3),                //comment
-                                false,                       //online
+                                0,                          //online
                                 it.group(11)))              //ip
                     }
 
@@ -79,28 +80,31 @@ class Repo {
     fun getCachedData(): List<DnscItem> = cache
 
     fun checkOnline(ip: String): Boolean {
+        Log.e("CHECKER", " " + ip)
+
         if (ip.isEmpty())
             return false
 
         try {
-            val socket: Socket
+            val socket = Socket()
+            val endPoint: InetSocketAddress
 
-            socket = when {
+            endPoint = when {
                 ip.contains("]:") -> { //ipv6
                     val lastIndex = ip.lastIndexOf(":")
                     val port = Integer.valueOf(ip.slice(lastIndex + 1 until ip.length))
                     val ip6 = ip.slice(0 until lastIndex)
 
-                    Socket(ip6, port)
+                    InetSocketAddress(ip6, port)
                 }
                 ip.contains(":") -> { //ipv4
                     val ipNPort: List<String> = ip.split(":")
-                    Socket(ipNPort[0], Integer.valueOf(ipNPort[1]))
+                    InetSocketAddress(ipNPort[0], Integer.valueOf(ipNPort[1]))
                 }
-                else -> Socket(ip, 22)
+                else -> InetSocketAddress(ip, 53)
             }
 
-            socket.soTimeout = 2000
+            socket.connect(endPoint, 2000)
 
             if (socket.isConnected) {
                 socket.close()
@@ -109,9 +113,9 @@ class Repo {
         } catch (ex: Exception) {
             Log.e("Network ex", "ip: " + ip + " GetNewData ex: " + ex.localizedMessage)
             ex.printStackTrace()
-            return false
         }
-        return true
+
+        return false
     }
 
 //    fun getNewDataFuture(): List<DnscItem> {

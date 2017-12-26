@@ -16,5 +16,5 @@ data class DnscItem(@PrimaryKey val id: Long,
                     val noLogs: String,
                     val location: String,
                     val comment: String,
-                    var online: Boolean,
+                    var online: Int,
                     var ip: String)
