@@ -14,7 +14,7 @@ import org.iskopasi.noname.entities.DnscItem
 /**
  * Created by cora32 on 21.12.2017.
  */
-class DnsAdapterDelegate(context: Context) : AdapterDelegate<SortedList<DnscItem>>() {
+class DnsAdapterDelegate(private val context: Context) : AdapterDelegate<SortedList<DnscItem>>() {
     private val inflater by lazy { LayoutInflater.from(context) }
 
     override fun isForViewType(items: SortedList<DnscItem>, position: Int): Boolean {
@@ -26,7 +26,15 @@ class DnsAdapterDelegate(context: Context) : AdapterDelegate<SortedList<DnscItem
 
     override fun onBindViewHolder(items: SortedList<DnscItem>, position: Int,
                                   holder: RecyclerView.ViewHolder, @Nullable payloads: List<Any>) {
-        (holder as ViewHolder).bind(items.get(position))
+        val item = items.get(position)
+        (holder as ViewHolder).bind(item)
+
+//        if (item.online)
+//            (holder as DnscListitemBinding).onlineView.background.mutate().setColorFilter(
+//                    ContextCompat.getColor(context, R.color.online), PorterDuff.Mode.SRC_IN)
+//        else
+//            (holder as DnscListitemBinding).onlineView.background.mutate().setColorFilter(
+//                    ContextCompat.getColor(context, R.color.offline), PorterDuff.Mode.SRC_IN)
     }
 
     class ViewHolder(private val binding: DnscListitemBinding) : RecyclerView.ViewHolder(binding.root) {

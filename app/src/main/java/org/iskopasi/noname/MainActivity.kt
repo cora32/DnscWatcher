@@ -20,6 +20,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import org.iskopasi.noname.adapters.DnsAdapter
 import org.iskopasi.noname.databinding.ActivityMainBinding
 import org.iskopasi.noname.entities.DnscItem
+import org.jetbrains.anko.doAsync
 
 
 class MainActivity : AppCompatActivity() {
@@ -60,6 +61,17 @@ class MainActivity : AppCompatActivity() {
 
                 adapter.dataList.clear()
                 adapter.dataList.addAll(list)
+
+                doAsync {
+                    for (i in 0..adapter.dataList.size()) {
+                        val item = adapter.dataList.get(i)
+
+                        if (model.checkOnline(item.ip)) {
+                            item.online = true
+                            binding.rv.post({ adapter.notifyItemChanged(i) })
+                        }
+                    }
+                }
             } else if (R.id.text_empty == binding.switcher.nextView.id) {
                 binding.switcher.showNext()
             }
@@ -74,7 +86,7 @@ class MainActivity : AppCompatActivity() {
             when (id) {
                 R.id.name_rb -> adapter.setComparator(compareBy(DnscItem::name))
                 R.id.no_logs_rb -> adapter.setComparator(compareByDescending(DnscItem::noLogs).thenBy(DnscItem::name))
-                R.id.online_rb -> adapter.setComparator(compareBy(DnscItem::online))
+                R.id.online_rb -> adapter.setComparator(compareByDescending(DnscItem::online).thenBy(DnscItem::name))
             }
             model.getCachedData()
         })

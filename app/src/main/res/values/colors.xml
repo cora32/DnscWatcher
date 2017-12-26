@@ -13,4 +13,7 @@
     <color name="red">#f53a3d</color>
     <color name="bgColor">#212121</color>
     <color name="bgColor2">#37474f</color>
+    <color name="online">#00c853</color>
+    <color name="checking">#ffa726</color>
+    <color name="offline">#f44336</color>
 </resources>

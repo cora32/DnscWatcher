@@ -3,6 +3,7 @@ package org.iskopasi.noname.repo
 import android.util.Log
 import org.iskopasi.noname.Utils
 import org.iskopasi.noname.entities.DnscItem
+import java.net.Socket
 import java.net.URL
 import java.util.regex.Pattern
 import javax.net.ssl.HostnameVerifier
@@ -51,7 +52,8 @@ class Repo {
                                 it.group(9),                //noLogs
                                 it.group(4),                //location
                                 it.group(3),                //comment
-                                true))                      //online
+                                false,                       //online
+                                it.group(11)))              //ip
                     }
 
             cacheData(list)
@@ -75,6 +77,42 @@ class Repo {
     }
 
     fun getCachedData(): List<DnscItem> = cache
+
+    fun checkOnline(ip: String): Boolean {
+        if (ip.isEmpty())
+            return false
+
+        try {
+            val socket: Socket
+
+            socket = when {
+                ip.contains("]:") -> { //ipv6
+                    val lastIndex = ip.lastIndexOf(":")
+                    val port = Integer.valueOf(ip.slice(lastIndex + 1 until ip.length))
+                    val ip6 = ip.slice(0 until lastIndex)
+
+                    Socket(ip6, port)
+                }
+                ip.contains(":") -> { //ipv4
+                    val ipNPort: List<String> = ip.split(":")
+                    Socket(ipNPort[0], Integer.valueOf(ipNPort[1]))
+                }
+                else -> Socket(ip, 22)
+            }
+
+            socket.soTimeout = 2000
+
+            if (socket.isConnected) {
+                socket.close()
+                return true
+            }
+        } catch (ex: Exception) {
+            Log.e("Network ex", "ip: " + ip + " GetNewData ex: " + ex.localizedMessage)
+            ex.printStackTrace()
+            return false
+        }
+        return true
+    }
 
 //    fun getNewDataFuture(): List<DnscItem> {
 //        val job: (AnkoAsyncContext<Repo>.() -> List<DnscItem>) = {

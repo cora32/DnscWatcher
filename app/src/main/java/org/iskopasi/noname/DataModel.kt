@@ -43,4 +43,8 @@ class DataModel : ViewModel() {
             }
         }
     }
+
+    fun checkOnline(ip: String): Boolean {
+        return repo.checkOnline(ip)
+    }
 }

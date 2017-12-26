@@ -8,7 +8,7 @@ import org.iskopasi.noname.entities.DnscItem
 /**
  * Created by cora32 on 23.12.2017.
  */
-@Database(entities = [(DnscItem::class)], version = 1)
+@Database(entities = [(DnscItem::class)], version = 2)
 abstract class DnsDatabase : RoomDatabase() {
     companion object {
         const val DNS_TABLE = "DNS_TABLE"
