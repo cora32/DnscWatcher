@@ -16,4 +16,5 @@
     <color name="online">#00c853</color>
     <color name="checking">#ffa726</color>
     <color name="offline">#f44336</color>
+    <color name="status_bar_color">#00695c</color>
 </resources>

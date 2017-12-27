@@ -7,6 +7,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.transition.ChangeBounds
 import android.support.transition.TransitionManager
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -35,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         //setting main theme to replace splash screen
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
+
+        window.statusBarColor = ContextCompat.getColor(this, R.color.status_bar_color)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
