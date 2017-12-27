@@ -60,7 +60,6 @@ class Repo {
             cacheData(list)
             saveDataToDb(list)
         } catch (ex: Exception) {
-            Log.e("Network ex", "GetNewData ex: " + ex.localizedMessage)
             ex.printStackTrace()
             return null
         }
@@ -80,8 +79,6 @@ class Repo {
     fun getCachedData(): List<DnscItem> = cache
 
     fun checkOnline(ip: String): Boolean {
-        Log.e("CHECKER", " " + ip)
-
         if (ip.isEmpty())
             return false
 
@@ -111,7 +108,7 @@ class Repo {
                 return true
             }
         } catch (ex: Exception) {
-            Log.e("Network ex", "ip: " + ip + " GetNewData ex: " + ex.localizedMessage)
+            Log.e("Network exception", "ip: " + ip + " : " + ex.localizedMessage)
             ex.printStackTrace()
         }
 

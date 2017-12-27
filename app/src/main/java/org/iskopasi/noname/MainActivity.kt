@@ -5,24 +5,21 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.transition.AutoTransition
 import android.support.transition.ChangeBounds
 import android.support.transition.TransitionManager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.Toast
-import com.google.firebase.iid.FirebaseInstanceId
 import org.iskopasi.noname.adapters.DnsAdapter
 import org.iskopasi.noname.databinding.ActivityMainBinding
 import org.iskopasi.noname.entities.DnscItem
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,8 +35,6 @@ class MainActivity : AppCompatActivity() {
         //setting main theme to replace splash screen
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-        val token = FirebaseInstanceId.getInstance().token
-        Log.e("FCM_nnm", "Token: $token")
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
@@ -52,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             binding.srl.isRefreshing = false
 
             if (list == null) {
-                Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show()
+                toast(getString(R.string.check_inet))
                 return@Observer
             }
 
@@ -64,28 +59,7 @@ class MainActivity : AppCompatActivity() {
                 adapter.dataList.clear()
                 adapter.dataList.addAll(list)
 
-                doAsync {
-                    val tr = AutoTransition()
-                    tr.duration = 2000
-                    for (i in 0..adapter.dataList.size()) {
-                        val item = adapter.dataList.get(i)
-
-                        if (model.checkOnline(item.ip))
-                            item.online = 1
-                        else
-                            item.online = -1
-
-                        binding.rv.post({
-                            val childView: View? = binding.rv.getChildAt(i)
-                            val onl: View? = childView?.findViewById(R.id.online_view)
-                            val onlp: ViewGroup? = childView?.findViewById(R.id.root_1)
-                            TransitionManager.beginDelayedTransition(onlp as ViewGroup, tr)
-                            adapter.notifyItemChanged(i)
-                        })
-
-                        Thread.sleep(2000)
-                    }
-                }
+                checkOnlineNodes(model)
             } else if (R.id.text_empty == binding.switcher.nextView.id) {
                 binding.switcher.showNext()
             }
@@ -117,6 +91,33 @@ class MainActivity : AppCompatActivity() {
         binding.srl.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
         binding.srl.setOnRefreshListener {
             model.getNewData()
+        }
+    }
+
+    private fun checkOnlineNodes(model: DataModel) {
+        doAsync {
+            for (i in 0..adapter.dataList.size()) {
+                if (!Utils.isNetworkUp(this@MainActivity)) {
+                    toast(getString(R.string.check_inet))
+                    break
+                }
+
+                val item = adapter.dataList.get(i)
+                val isOnline = model.checkOnline(item.ip)
+                binding.rv.post({
+                    val onlineView: View? = binding.rv.findViewHolderForItemId(i.toLong())
+                            ?.itemView?.findViewById(R.id.online_view)
+                    if (isOnline) {
+                        item.online = 1
+                        Utils.animateDrawableColor(this@MainActivity, R.color.checking,
+                                R.color.online, onlineView, 1000)
+                    } else {
+                        item.online = -1
+                        Utils.animateDrawableColor(this@MainActivity, R.color.checking,
+                                R.color.offline, onlineView, 1000)
+                    }
+                })
+            }
         }
     }
 

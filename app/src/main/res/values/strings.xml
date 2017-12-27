@@ -7,4 +7,5 @@
     <string name="by_name">Name</string>
     <string name="by_logs">Logging</string>
     <string name="by_online">Online</string>
+    <string name="check_inet">Network error: Check internet connection.</string>
 </resources>
