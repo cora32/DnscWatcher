@@ -57,8 +57,14 @@ class Repo {
                                 it.group(11)))              //ip
                     }
 
-            cacheData(list)
             saveDataToDb(list)
+
+            //Saving previous online states for correct sorting by online after swipe-update
+            if (cache.isNotEmpty() && cache.size == list.size)
+                list.zip(cache)
+                        .forEach { it.first.online = it.second.online }
+
+            cacheData(list)
         } catch (ex: Exception) {
             ex.printStackTrace()
             return null
