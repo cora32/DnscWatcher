@@ -3,15 +3,18 @@ package org.iskopasi.noname.adapters
 import android.content.Context
 import android.support.v7.util.SortedList
 import android.support.v7.widget.util.SortedListAdapterCallback
+import org.iskopasi.noname.ScrollSwitchingLayoutManager
 import org.iskopasi.noname.adapterdelegates.DnsAdapterDelegate
 import org.iskopasi.noname.entities.DnscItem
 
 /**
  * Created by cora32 on 21.12.2017.
  */
-class DnsAdapter(context: Context, comparator: Comparator<DnscItem>) : BaseAdapter<DnscItem>(comparator) {
+class DnsAdapter(context: Context,
+                 lm: ScrollSwitchingLayoutManager,
+                 comparator: Comparator<DnscItem>) : BaseAdapter<DnscItem>(comparator) {
     init {
-        delegatesManager.addDelegate(DnsAdapterDelegate(context))
+        delegatesManager.addDelegate(DnsAdapterDelegate(context, lm))
 
         dataList = SortedList(DnscItem::class.java,
                 object : SortedListAdapterCallback<DnscItem>(this) {

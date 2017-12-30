@@ -24,10 +24,11 @@ import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
     private val registry by lazy { LifecycleRegistry(this) }
-    private lateinit var binding: ActivityMainBinding
-    private val adapter = DnsAdapter(this, compareBy(DnscItem::name))
+    private val layoutManager by lazy { ScrollSwitchingLayoutManager(this) }
     private val sortClHeight by lazy { resources.getDimensionPixelSize(R.dimen.sort_cl_height) }
     private val transition by lazy { ChangeBounds() }
+    private val adapter = DnsAdapter(this, layoutManager, compareBy(DnscItem::name))
+    private lateinit var binding: ActivityMainBinding
 
     override fun getLifecycle(): LifecycleRegistry = registry
 
@@ -65,6 +66,14 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        //Setting up adapter and recyclerview settings
+        adapter.setHasStableIds(true)
+        binding.rv.layoutManager = layoutManager
+        binding.rv.setHasFixedSize(true)
+        binding.rv.itemAnimator = null
+        binding.rv.adapter = adapter
+        binding.rv.addItemDecoration(DividerItemDecoration(this, (binding.rv.layoutManager as LinearLayoutManager).orientation))
+
         //Setting up switcher
         binding.switcher.inAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in)
         binding.switcher.outAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out)
@@ -78,14 +87,6 @@ class MainActivity : AppCompatActivity() {
             }
             model.getCachedData()
         })
-
-        //Setting up adapter and recyclerview settings
-        adapter.setHasStableIds(true)
-        binding.rv.layoutManager = LinearLayoutManager(this)
-        binding.rv.setHasFixedSize(true)
-        binding.rv.itemAnimator = null
-        binding.rv.adapter = adapter
-        binding.rv.addItemDecoration(DividerItemDecoration(this, (binding.rv.layoutManager as LinearLayoutManager).orientation))
 
         //Setting up swiperefreshlayout settings
         binding.srl.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
