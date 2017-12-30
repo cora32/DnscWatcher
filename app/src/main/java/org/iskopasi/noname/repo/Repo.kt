@@ -14,7 +14,7 @@ import javax.net.ssl.HttpsURLConnection
  * Created by cora32 on 13.12.2017.
  */
 class Repo {
-    private val re by lazy { Pattern.compile("(.*?),(\".*?\"),(\".*?\"),(\".*?\"),(\".*?\"),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*?),(.*)") }
+    private val re by lazy { Pattern.compile("(.*?),(\".*?\"),(\".*?\"),(\".*?\"),(\".*?\"),(.*?),(.*?),(.*?),(.*?),(.*?),\"?(.*?)\"?,(.*?),(.*?),(.*)") }
     private val cache: ArrayList<DnscItem> = ArrayList()
     private val db: DnsDb by lazy { DnsDb() }
 
