@@ -1,6 +1,5 @@
 package org.iskopasi.noname
 
-import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
@@ -23,14 +22,11 @@ import org.jetbrains.anko.toast
 
 
 class MainActivity : AppCompatActivity() {
-    private val registry by lazy { LifecycleRegistry(this) }
     private val layoutManager by lazy { ScrollSwitchingLayoutManager(this) }
     private val sortClHeight by lazy { resources.getDimensionPixelSize(R.dimen.sort_cl_height) }
     private val transition by lazy { ChangeBounds() }
     private val adapter = DnsAdapter(this, layoutManager, compareBy(DnscItem::name))
     private lateinit var binding: ActivityMainBinding
-
-    override fun getLifecycle(): LifecycleRegistry = registry
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //setting main theme to replace splash screen
