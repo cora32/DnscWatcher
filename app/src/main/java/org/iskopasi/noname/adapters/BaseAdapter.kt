@@ -20,7 +20,7 @@ open class BaseAdapter<T>(comparator: Comparator<T>) : RecyclerView.Adapter<View
         return delegatesManager.getItemViewType(dataList, position)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder = delegatesManager.onCreateViewHolder(parent, viewType)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = delegatesManager.onCreateViewHolder(parent, viewType)
 
     override fun getItemCount(): Int = dataList.size()
 
